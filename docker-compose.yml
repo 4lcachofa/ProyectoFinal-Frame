@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ligas_db
+    environment:
+      POSTGRES_DB: ligas_db
+      POSTGRES_USER: ligas_user
+      POSTGRES_PASSWORD: ligas_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    container_name: ligas_api
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/ligas_db
+      DB_USER: ligas_user
+      DB_PASS: ligas_pass
+      JWT_SECRET: "PFqFNJ7AAzYVu6uROYEfKlfso8ha0TTJW/KGfzk4F620VdEOdxJTsMIjjRRLFjuN"
+      JWT_EXP_MS: "86400000"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  front:
+    container_name: ligas_front
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
