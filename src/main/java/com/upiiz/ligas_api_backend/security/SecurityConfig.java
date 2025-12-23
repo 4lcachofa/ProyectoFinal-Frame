@@ -29,9 +29,21 @@ public class SecurityConfig {
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/swagger/**", "/v3/api-docs/**").permitAll()
+                // ✅ Swagger/OpenAPI público (para ver docs y usar Try it out)
+                .requestMatchers(
+                        "/api/auth/**",
+                        "/swagger", "/swagger/**",
+                        "/swagger-ui.html", "/swagger-ui/**",
+                        "/v3/api-docs", "/v3/api-docs/**"
+                ).permitAll()
+
+                // (si quieres GET ligas público)
                 .requestMatchers(HttpMethod.GET, "/api/ligas/**").permitAll()
+
+                // admin only
                 .requestMatchers(HttpMethod.DELETE, "/api/ligas/**").hasRole("ADMIN")
+
+                // lo demás requiere JWT
                 .anyRequest().authenticated()
         );
 
