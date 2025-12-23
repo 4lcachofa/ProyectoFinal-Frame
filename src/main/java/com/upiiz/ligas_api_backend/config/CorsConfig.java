@@ -14,11 +14,12 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
 
-        // Orígenes permitidos (Angular local + el que uses en deploy)
-        cfg.setAllowedOrigins(List.of(
+        // ✅ Usa patterns cuando hay wildcard
+        cfg.setAllowedOriginPatterns(List.of(
                 "http://localhost:4200",
-                // agrega aquí tu dominio de Vercel si aplica, ejemplo:
-                "https://*.vercel.app"
+                "https://*.vercel.app",
+                // si tu API está en Render y quieres abrir swagger desde ahí mismo:
+                "https://*.onrender.com"
         ));
 
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
